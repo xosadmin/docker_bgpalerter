@@ -1,33 +1,29 @@
-#!/bin/sh -e
+#!/bin/bash
 checkASN () {
   local retrieveASN=$1
+  retrieveASN=$(echo "$retrieveASN" | xargs)
   if [ -z "$retrieveASN" ]; then
     echo "The ASN number is not specified."
     return 1
   fi
   if ! [[ "$retrieveASN" =~ ^[0-9]+$ ]]; then
-    echo "Invalid ASN number!"
+    echo "Invalid ASN number."
     return 1
   fi
   if [ "$retrieveASN" -lt 1 ] || [ "$retrieveASN" -gt 4294967295 ]; then
-    echo "Invalid ASN number!"
+    echo "Invalid ASN number."
     return 1
   fi
-  if [ "$retrieveASN" -ge 0 ] && [ "$retrieveASN" -le 1023 ]; then
-        echo "Bogon ASN detected."
-        return 1
-    elif [ "$retrieveASN" -eq 23456 ]; then
-       echo "Bogon ASN detected."
-        return 1
-    elif [ "$retrieveASN" -ge 64512 ] && [ "$retrieveASN" -le 65535 ]; then
-        echo "Bogon ASN detected."
-        return 1
-    elif [ "$retrieveASN" -ge 4200000000 ] && [ "$retrieveASN" -le 4294967295 ]; then
-        echo "Bogon ASN detected."
-        return 1
+  if ([ "$retrieveASN" -ge 0 ] && [ "$retrieveASN" -le 1023 ]) || 
+     [ "$retrieveASN" -eq 23456 ] || 
+     ([ "$retrieveASN" -ge 64512 ] && [ "$retrieveASN" -le 65535 ]) || 
+     ([ "$retrieveASN" -ge 4200000000 ] && [ "$retrieveASN" -le 4294967295 ]); then
+    echo "Bogon ASN detected."
+    return 1
   fi
   return 0
 }
+
 
 if [ ! -f /etc/bgpalerter/bgpalerter ]; then
   echo "Cannot find bgpalerter, downloading..."
@@ -46,7 +42,7 @@ fi
 checkASN "$ASN"
 checkASNNum=$?
 
-if [ checkASNNum -eq 1 ]; then
+if [ $checkASNNum -eq 1 ]; then
   exit 1
 else
   echo "Valid ASN $ASN detected, generating prefix list..."
