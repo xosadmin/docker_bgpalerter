@@ -1,5 +1,5 @@
 #!/bin/sh -e
-function checkASN() {
+checkASN () {
   local retrieveASN=$1
   if [ -z "$retrieveASN" ]; then
     echo "The ASN number is not specified."
