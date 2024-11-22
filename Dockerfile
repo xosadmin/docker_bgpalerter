@@ -11,4 +11,6 @@ RUN mkdir /etc/bgpalerter
 
 COPY start.sh /etc
 
+RUN chmod a+x /etc/start.sh
+
 CMD ["/etc/start.sh"]
