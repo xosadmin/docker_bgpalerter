@@ -7,6 +7,4 @@ RUN apt-get update -y && apt-get clean \
 
 RUN mkdir /etc/bgpalerter && mkdir /opt/data
 
-COPY config.yml /etc/bgpalerter
-
 CMD ["/etc/start.sh"]
