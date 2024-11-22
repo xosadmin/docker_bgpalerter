@@ -8,4 +8,6 @@ RUN apt-get update -y && apt-get install wget curl -y \
 
 RUN mkdir /etc/bgpalerter && mkdir /opt/data
 
+COPY start.sh /etc
+
 CMD ["/etc/start.sh"]
